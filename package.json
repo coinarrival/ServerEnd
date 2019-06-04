@@ -1,0 +1,39 @@
+{
+  "name": "coinarrival-serverend",
+  "version": "1.0.0",
+  "description": "ServerEnd for project coinarrival",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coinarrival/ServerEnd.git"
+  },
+  "keywords": [
+    "coinarrival",
+    "serverend",
+    "koa",
+    "koa2"
+  ],
+  "author": "coinarrival",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/coinarrival/ServerEnd/issues"
+  },
+  "homepage": "https://github.com/coinarrival/ServerEnd#readme",
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.7.0",
+    "koa-body": "^4.1.0",
+    "koa-jwt": "^3.5.1",
+    "koa-router": "^7.4.0",
+    "log4js": "^4.3.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "supertest": "^4.0.2"
+  }
+}
