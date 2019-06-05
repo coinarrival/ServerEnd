@@ -1,5 +1,7 @@
 # ServerEnd
 
+![build](https://travis-ci.org/coinarrival/ServerEnd.svg?branch=master)
+
 Server-end project for Coin Arrival
 
 ## Dependency
