@@ -1,6 +1,6 @@
 # ServerEnd
 
-![build](https://travis-ci.org/coinarrival/ServerEnd.svg?branch=master)
+![build](https://travis-ci.org/coinarrival/ServerEnd.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/coinarrival/ServerEnd/badge.svg?branch=master)](https://coveralls.io/github/coinarrival/ServerEnd?branch=master)
 
 Server-end project for Coin Arrival
 

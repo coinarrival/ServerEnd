@@ -4,7 +4,8 @@
   "description": "ServerEnd for project coinarrival",
   "main": "app.js",
   "scripts": {
-    "test": "nyc --reporter=lcov ./node_modules/.bin/mocha --recursive",
+    "test": "./node_modules/.bin/mocha",
+    "cover": "nyc npm run test && nyc report --reporter=text-lcov | coveralls",
     "start": "node ./bin/app.js"
   },
   "repository": {
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "coveralls": "^3.0.4",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
     "supertest": "^4.0.2"
@@ -40,7 +42,8 @@
   "nyc": {
     "all": true,
     "exclude": [
-      "*/config/*.js"
+      "*/config/*.js",
+      "coverage/lcov-report/*.js"
     ]
   }
 }
