@@ -4,7 +4,7 @@
   "description": "ServerEnd for project coinarrival",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha",
+    "test": "nyc --reporter=lcov ./node_modules/.bin/mocha --recursive",
     "start": "node ./bin/app.js"
   },
   "repository": {
@@ -34,6 +34,13 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
     "supertest": "^4.0.2"
+  },
+  "nyc": {
+    "all": true,
+    "exclude": [
+      "*/config/*.js"
+    ]
   }
 }
