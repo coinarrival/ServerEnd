@@ -8,7 +8,7 @@ Server-end project for Coin Arrival
 
 |node|npm|
 |:--:|:-:|
-|>=v10.0|>=v6.0|
+|>=v9.0|>=v6.0|
 
 ## Usage
 
