@@ -1,5 +1,8 @@
 const axios  = require('axios');
-const config = require('../config/config')
+
+const config = require('../config/config');
+
+const format = require('../utils/format');
 const resLog = require('../utils/logger')('resLogger');
 const errLog = require('../utils/logger')('errLogger');
 
@@ -9,26 +12,6 @@ function verify_login(ctx, username) {
   // return true if username is the username of current user
   return true;
   return false;
-}
-
-/**
- * Validate the email if it's in correct format
- * @param {string} email the email to be validated
- * @returns {boolean} true for matches format, otherwise false
- */
-function is_valid_email(email) {
-  // TODO: verify with regular expression
-  return true;
-}
-
-/**
- * Validate the phone if it's in correct format
- * @param {string} phone the phone to be validated
- * @returns {boolean} true for matches format, otherwise false
- */
-function is_valid_phone(phone) {
-  // TODO: verify with regular expression
-  return true;
 }
 
 // Get account info with given username
@@ -90,7 +73,7 @@ let account_info_post = async ctx => {
   
   // check email
   if (body.email !== undefined) {
-    if (is_valid_email(body.email)) {
+    if (format.email(body.email)) {
       request_body.email = body.email;
     } else {
       ctx.status = 400;
@@ -101,7 +84,7 @@ let account_info_post = async ctx => {
   
   // check phone
   if (body.phone !== undefined) {
-    if (is_valid_phone(body.phone)) {
+    if (format.phone(body.phone)) {
       request_body.phone = body.phone;
     } else {
       ctx.status = 400;

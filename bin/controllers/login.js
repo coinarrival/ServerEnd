@@ -1,17 +1,10 @@
 const axios  = require('axios');
-const config = require('../config/config')
+
+const config = require('../config/config');
+
+const format = require('../utils/format');
 const resLog = require('../utils/logger')('resLogger');
 const errLog = require('../utils/logger')('errLogger');
-
-/**
- * Validate the username if it's in correct format
- * @param {string} username the username to be validated
- * @returns {boolean} true for matches format, otherwise false
- */
-function is_valid_username(username) {
-  // TODO: verify with regular expression
-  return true;
-}
 
 // user login
 let login = async ctx => {
@@ -26,7 +19,7 @@ let login = async ctx => {
     return;
   }
 
-  if (!is_valid_username(username)) {
+  if (!format.username(username)) {
     ctx.status = 400;
     resLog.info('Login: invalid format of username.');
     return;

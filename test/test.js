@@ -1,7 +1,19 @@
 const chai = require('chai');
 
-describe('Test for chai', () => {
-  it('Expect', () => {
-    chai.expect(5).to.equal(5);
+const format = require('../bin/utils/format');
+
+// -------------------- Format.js --------------------
+describe('Test for format function', () => {
+  it('username', () => {
+    chai.expect(format.username('test')).to.equal(true);
+  });
+  it('password', () => {
+    chai.expect(format.username('test')).to.equal(true);
+  });
+  it('email', () => {
+    chai.expect(format.email('test')).to.equal(true);
+  });
+  it('phone', () => {
+    chai.expect(format.phone('test')).to.equal(true);
   });
 });

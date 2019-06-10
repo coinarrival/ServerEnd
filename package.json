@@ -43,8 +43,11 @@
   "nyc": {
     "all": true,
     "exclude": [
+      "*/controllers/*.js",
+      "*/middleware/*.js",
       "*/config/*.js",
-      "coverage/lcov-report/*.js"
+      "coverage/lcov-report/*.js",
+      "*/utils/logger.js"
     ]
   }
 }
