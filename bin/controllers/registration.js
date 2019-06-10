@@ -29,10 +29,10 @@ let registration = async ctx => {
     'password': password,
   })
     .then(response => {
-      if (response.status == 201) {
+      if (response.status == 201) { // registration success
         ctx.status = 201;
         resLog.info(`Registration: ${username} succeeded`);
-      } else {
+      } else { // backend error
         ctx.status = 500;
         ctx.response.body = {
           'message': 'Unknown backend error'
@@ -40,7 +40,7 @@ let registration = async ctx => {
         errLog.error('Registration: Unknown backend response.');
       }
     })
-    .catch(error => {
+    .catch(error => { // registration fail
       switch(error.status) {
         case 400:
           ctx.status = 400;

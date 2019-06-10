@@ -1,4 +1,5 @@
 const axios  = require('axios');
+const jwt = require('jsonwebtoken');
 
 const config = require('../config/config');
 
@@ -30,11 +31,15 @@ let login = async ctx => {
     'password': password,
   })
     .then(response => {
-      if (response.status == 200) {
+      if (response.status == 200) { // login success
+        // sign jwt
+        const token = jwt.sign(
+          { user: username }, config.secret, { expiresIn: '3h' }
+        );
         ctx.status = 200 ;
+        ctx.cookies.set(config.jwtCookieKey, token);
         resLog.info(`Login: ${username} online`);
-        // TODO: Do something with token
-      } else {
+      } else { // backend error
         ctx.status = 500;
         ctx.response.body = {
           'message': 'Unknown backend error'
@@ -42,7 +47,7 @@ let login = async ctx => {
         errLog.error('Login: Unknown backend response');
       }
     })
-    .catch(error => {
+    .catch(error => { // login fail
       switch(error.status) {
         case 400:
           ctx.status = 400;

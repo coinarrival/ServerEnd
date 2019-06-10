@@ -6,14 +6,6 @@ const format = require('../utils/format');
 const resLog = require('../utils/logger')('resLogger');
 const errLog = require('../utils/logger')('errLogger');
 
-// TODO: fix without this function for koa-jwt
-function verify_login(ctx, username) {
-  // TODO: Verify the login status with token
-  // return true if username is the username of current user
-  return true;
-  return false;
-}
-
 // Get account info with given username
 let account_info_get = async ctx => {
   let username = ctx.params.username;
@@ -28,7 +20,7 @@ let account_info_get = async ctx => {
   // retrieve account info from back-end
   await axios.get(`${config.backend}/account_info?username=${username}`)
     .then(response => {
-      if (response.status == 200) {
+      if (response.status == 200) { // retrieve success
         resLog.info(`Query success: user info of ${username} sent`);
         ctx.status = 200;
         ctx.response.body = {
@@ -39,7 +31,7 @@ let account_info_get = async ctx => {
         };
       }
     })
-    .catch(error => {
+    .catch(error => { // retrieve fail
       if (error.status == 404) {
         resLog.info(`Query success: user info of ${username} not found`);
         ctx.status = 404;
@@ -98,18 +90,12 @@ let account_info_post = async ctx => {
     request_body.avatar = body.avatar;
   }
 
-  // TODO: fix without it with koa-jwt
-  if (!verify_login(ctx, ctx.username)) {
-    ctx.status = 401;
-    resLog.info('Try to edit ' + username + '\'s info with other account');
-  }
-
   await axios.post(`${config.backend}/account_info`, request_body)
     .then(response => {
-      if (response.status == 201) {
+      if (response.status == 201) { // update success
         ctx.status = 201;
         resLog.info(`User info of ${body.username} updated`);
-      } else {
+      } else { // backend error
         ctx.status = 500;
         ctx.response.body = {
           'message': 'Unknown backend error'
@@ -117,7 +103,7 @@ let account_info_post = async ctx => {
         errLog.error('Unknown backend response');
       }
     })
-    .catch(error => {
+    .catch(error => { // update fail
       ctx.status = 500;
       ctx.response.body = {
         'message': 'Unknown backend error'
