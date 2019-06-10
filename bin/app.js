@@ -4,6 +4,7 @@ const koa = require('koa');
 // custom middleware
 const router = require('./middleware/controller');
 const body = require('./middleware/body');
+const koaRequest = require('koa-http-request');
 
 // custom utils and configuration
 const defaultLogger = require('./utils/logger')('default');
