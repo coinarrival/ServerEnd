@@ -63,5 +63,5 @@ let registration = async ctx => {
 }
 
 module.exports = {
-  'POST /login': login,
+  'POST /registration': registration,
 }
