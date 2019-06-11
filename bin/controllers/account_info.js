@@ -44,7 +44,7 @@ let account_info_get = async ctx => {
         };
       }
     });
-}
+};
 
 // Change account info with given info
 let account_info_post = async ctx => {
@@ -110,9 +110,9 @@ let account_info_post = async ctx => {
       };
       errLog.error('Unknown backend response');
     });
-}
+};
 
 module.exports = {
   'GET /account_info': account_info_get,
   'POST /account_info': account_info_post,
-}
+};
