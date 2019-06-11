@@ -8,7 +8,7 @@ const errLog = require('../utils/logger')('errLogger');
 
 // Get account info with given username
 let account_info_get = async ctx => {
-  let username = ctx.params.username;
+  let username = ctx.query.username;
 
   // check username
   if (username === undefined) {
@@ -113,6 +113,6 @@ let account_info_post = async ctx => {
 };
 
 module.exports = {
-  'GET /account_info/:username': account_info_get,
+  'GET /account_info': account_info_get,
   'POST /account_info': account_info_post,
 };
