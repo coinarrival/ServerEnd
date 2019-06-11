@@ -1,8 +1,10 @@
 const fs = require('fs');
 const PATH = require('path');
 const router = require('koa-router')();
-
 const defaultLogger = require('../utils/logger')('default');
+const assertsPath = './public'
+
+router.get('/public/*', serve(assertsPath)); // Router for static resources
 
 /**
  * Register the router from the router controller files
