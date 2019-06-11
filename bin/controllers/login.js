@@ -37,7 +37,7 @@ let login = async ctx => {
           { user: username }, config.secret, { expiresIn: '3h' }
         );
         ctx.status = 200 ;
-        ctx.cookies.set(config.jwtCookieKey, token);
+        ctx.cookies.set(config.jwt_cookie_key, token);
         resLog.info(`Login: ${username} online`);
       } else { // backend error
         ctx.status = 500;
@@ -66,8 +66,8 @@ let login = async ctx => {
           break;
       }
     });
-}
+};
 
 module.exports = {
   'POST /login': login,
-}
+};

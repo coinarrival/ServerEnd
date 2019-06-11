@@ -1,11 +1,12 @@
 // external library and middleware
 const koa = require('koa');
+const path = require('path');
 const koaJwt = require('koa-jwt');
 
 // custom middleware
 const body = require('./middleware/body');
 const router = require('./middleware/controller');
-const static_serve = require('./middleware/static')
+const static_serve = require('./middleware/static');
 
 
 // custom utils and configuration
@@ -17,11 +18,11 @@ const app = new koa();
 app.use(
   koaJwt({ // jwt configuration
     secret: config.secret,
-    cookie: config.jwtCookieKey // search jwt in cookie, too
+    cookie: config.jwt_cookie_key // search jwt in cookie, too
   })
   .unless({ // below url needn't provide jwt
     path: [
-      /^\/public\/\*/, // static resources
+      /^\/public\/*/, // static resources
       /^\/registration/,
       /^\/login/
     ]
@@ -35,7 +36,7 @@ app.use(body());
 app.use(router());
 
 // Route static resources
-app.use(static_serve(config.static_path));
+app.use(static_serve(path.join(__dirname, config.static_path)));
 
 app.listen(config.port, () => {
   defaultLogger.trace(`Server running at port:${config.port}`);

@@ -15,7 +15,7 @@
 let username = function is_valid_username(username) {
   // TODO: verify with regular expression
   return true;
-}
+};
 
 /**
  * Validate the password if it's in correct format
@@ -25,7 +25,7 @@ let username = function is_valid_username(username) {
 let password = function is_valid_password(password) {
   // TODO: verify with regular expression
   return true;
-}
+};
 
 /**
  * Validate the email if it's in correct format
@@ -35,7 +35,7 @@ let password = function is_valid_password(password) {
 let email = function is_valid_email(email) {
   // TODO: verify with regular expression
   return true;
-}
+};
 
 /**
  * Validate the phone if it's in correct format
@@ -45,11 +45,11 @@ let email = function is_valid_email(email) {
 let phone = function is_valid_phone(phone) {
   // TODO: verify with regular expression
   return true;
-}
+};
 
 module.exports = {
   username: username,
   password: password,
   email: email,
   phone: phone
-}
+};

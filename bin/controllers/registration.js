@@ -59,8 +59,8 @@ let registration = async ctx => {
           break;
       }
     });
-}
+};
 
 module.exports = {
   'POST /registration': registration,
-}
+};
