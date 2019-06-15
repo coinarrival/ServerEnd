@@ -57,4 +57,4 @@ log4js.configure({
 
 module.exports = function (loggerName) {
   return log4js.getLogger(loggerName);
-}
+};

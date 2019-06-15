@@ -89,8 +89,8 @@ let login = async ctx => {
       errLog.error('Login: Unknown backend error.');
       break;
     });
-}
+};
 
 module.exports = {
   'POST /login': login,
-}
+};

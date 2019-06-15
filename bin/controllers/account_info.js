@@ -1,4 +1,6 @@
+const path = require('path');
 const axios  = require('axios');
+const jwt = require('jsonwebtoken');
 
 const config = require('../config/config');
 
@@ -8,7 +10,7 @@ const errLog = require('../utils/logger')('errLogger');
 
 // Get account info with given username
 let account_info_get = async ctx => {
-  let username = ctx.params.username;
+  let username = ctx.query.username;
 
   // check username
   if (username === undefined) {
@@ -191,7 +193,23 @@ let account_info_post = async ctx => {
     });
 };
 
+// save user avatar file
+let upload_avatar = async ctx => {
+  let avatar_file = ctx.request.files.file;
+
+  let payload = jwt.decode(ctx.cookies.get(config.jwt_cookie_key));
+  let file_path = path.join(__dirname, '../../resources/public/avatar', payload.user);
+  let file_extension = avatar_file.name.split('.').slice(-1)[0];
+  
+  let reader = fs.createReadStream(avatar_file.path);
+  let upStream = fs.createWriteStream(`${file_path}.${file_extension}`);
+  reader.pipe(upStream);
+  
+  ctx.status = 200;
+};
+
 module.exports = {
-  'GET /account_info/:username': account_info_get,
+  'GET /account_info': account_info_get,
   'POST /account_info': account_info_post,
+  'POST /avatar': upload_avatar,
 };

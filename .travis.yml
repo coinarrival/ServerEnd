@@ -10,6 +10,7 @@ cache:
   directories:
     - node_modules
 
+# dependency installation
 install:
   npm install
 
@@ -25,3 +26,12 @@ after_success:
 branches:
   only:
     - master
+
+# notification settings
+notifications:
+  email:
+    recipients:
+      - xuwy27@mail2.sysu.edu.cn
+      - xiongyq7@mail2.sysu.edu.cn
+    on_success: never # default: change
+    on_failure: always # default: always

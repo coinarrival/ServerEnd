@@ -81,8 +81,8 @@ let registration = async ctx => {
         };
         errLog.error('Login: Unknown backend error.');
     });
-}
+};
 
 module.exports = {
   'POST /registration': registration,
-}
+};
