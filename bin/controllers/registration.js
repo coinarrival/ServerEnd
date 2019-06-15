@@ -13,13 +13,19 @@ let registration = async ctx => {
 
   // check registration info
   if (username === undefined || password === undefined) {
-    ctx.status = 400;
+    ctx.status = 200;
+    ctx.response.body = {
+      'status_code': 400,
+    };
     resLog.info('Registration: necessary info not provided.');
     return;
   }
 
   if (!format.username(username)) {
-    ctx.status = 400;
+    ctx.status = 200;
+    ctx.response.body = {
+      'status_code': 400,
+    };
     resLog.info('Registration: invalid format of username.');
     return;
   }
@@ -29,9 +35,37 @@ let registration = async ctx => {
     'password': password,
   })
     .then(response => {
-      if (response.status == 201) { // registration success
-        ctx.status = 201;
-        resLog.info(`Registration: ${username} succeeded`);
+      if (response.status == 200) { 
+        switch(response.data.status_code) {
+          case 201:
+            // registration success
+            ctx.status = 200;
+            ctx.response.body = {
+              'status_code': 201,
+            };
+            resLog.info(`Registration: ${username} succeeded`);
+          case 400:
+            ctx.status = 200;
+            ctx.response.body = {
+              'status_code': 400,
+            };
+            resLog.info('Registration: necessary info not provided.');
+            break;
+          case 406:
+            ctx.status = 200;
+            ctx.response.body = {
+              'status_code': 406,
+            };
+            resLog.info('Registration: Conflict username.');
+            break;
+          default: // unknown status_code
+            ctx.status = 500;
+            ctx.response.body = {
+              'message': 'Unknown backend error'
+            };
+            errLog.error('Registration: Unknown backend response.');
+            break;
+        }
       } else { // backend error
         ctx.status = 500;
         ctx.response.body = {
@@ -41,23 +75,11 @@ let registration = async ctx => {
       }
     })
     .catch(error => { // registration fail
-      switch(error.status) {
-        case 400:
-          ctx.status = 400;
-          resLog.info('Registration: necessary info not provided.');
-          break;
-        case 409:
-          ctx.status = 406;
-          resLog.info('Registration: Conflict username.');
-          break;
-        default:
-          ctx.status = 500;
-          ctx.response.body = {
-            'message': 'Unknown backend error'
-          };
-          errLog.error('Login: Unknown backend response.');
-          break;
-      }
+        ctx.status = 500;
+        ctx.response.body = {
+          'message': 'Unknown backend error'
+        };
+        errLog.error('Login: Unknown backend error.');
     });
 }
 

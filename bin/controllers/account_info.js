@@ -12,7 +12,10 @@ let account_info_get = async ctx => {
 
   // check username
   if (username === undefined) {
-    ctx.status = 400;
+    ctx.status = 200;
+    ctx.response.body = {
+      'status_code': 400,
+    };
     resLog.info('Get user info: necessary info not provided.');
     return;
   }
@@ -21,28 +24,50 @@ let account_info_get = async ctx => {
   await axios.get(`${config.backend}/account_info?username=${username}`)
     .then(response => {
       if (response.status == 200) { // retrieve success
-        resLog.info(`Query success: user info of ${username} sent`);
-        ctx.status = 200;
-        ctx.response.body = {
-          username: response.username,
-          email: response.email,
-          phone: response.phone,
-          avatar: response.avatar,
-        };
+        switch(response.data.status_code) {
+          case 200:
+            resLog.info(`Query success: user info of ${username} sent`);
+            ctx.status = 200;
+            ctx.response.body = {
+              status_code: 200,
+              data: {
+                username: response.data.data.username,
+                email: response.data.data.email,
+                phone: response.data.data.phone,
+                avatar: response.data.data.avatar,
+              }
+            };
+            break;
+          case 404:
+            resLog.info(`Query success: user info of ${username} not found`);
+            ctx.status = 200;
+            ctx.response.body = {
+              'status_code': 404,
+            };
+            break;
+          case 500:
+            errLog.error(`Query failed: unknown backend error when querying user info of ${username}`);
+            ctx.status = 500;
+            ctx.response.body = {
+              'message': 'Unknown backend error'
+            };
+            break;
+          default:
+            errLog.error(`Query failed: unexpected backend response when querying user info of ${username}`);
+            ctx.status = 500;
+            ctx.response.body = {
+              'message': 'Unknown backend error'
+            };
+            break;
+        } 
       }
     })
     .catch(error => { // retrieve fail
-      if (error.status == 404) {
-        resLog.info(`Query success: user info of ${username} not found`);
-        ctx.status = 404;
-      }
-      else {
-        errLog.error(`Query failed: unknown backend error when querying user info of ${username}`);
-        ctx.status = 500;
-        ctx.response.body = {
-          'message': 'Unknown backend error'
-        };
-      }
+      errLog.error(`Query failed: unknown backend error when querying user info of ${username}`);
+      ctx.status = 500;
+      ctx.response.body = {
+        'message': 'Unknown backend error'
+      };  
     });
 };
 
@@ -53,14 +78,26 @@ let account_info_post = async ctx => {
 
   // check username
   if (body.username === undefined) {
-    ctx.status = 400;
+    ctx.status = 200;
+    ctx.response.body = {
+      'status_code': 400,
+    };
     resLog.info('Update user info: necessary info not provided.');
   }
   request_body.username = body.username;
   
   // check password
   if (body.password !== undefined) {
-    request_body.password = body.password;
+    if (format.password(body.password)) {
+      request_body.password = body.password
+    } else {
+      ctx.status = 200;
+      ctx.response.body = {
+        'status_code': 400,
+      };
+      resLog.info('Invalid format of password when updating');
+      return;
+    }
   }
   
   // check email
@@ -68,7 +105,10 @@ let account_info_post = async ctx => {
     if (format.email(body.email)) {
       request_body.email = body.email;
     } else {
-      ctx.status = 400;
+      ctx.status = 200;
+      ctx.response.body = {
+        'status_code': 400,
+      };
       resLog.info('Invalid format of email when updating');
       return;
     }
@@ -79,7 +119,10 @@ let account_info_post = async ctx => {
     if (format.phone(body.phone)) {
       request_body.phone = body.phone;
     } else {
-      ctx.status = 400;
+      ctx.status = 200;
+      ctx.response.body = {
+        'status_code': 400,
+      };
       resLog.info('Invalid format of phone when updating');
       return;      
     }
@@ -92,9 +135,45 @@ let account_info_post = async ctx => {
 
   await axios.post(`${config.backend}/account_info`, request_body)
     .then(response => {
-      if (response.status == 201) { // update success
-        ctx.status = 201;
-        resLog.info(`User info of ${body.username} updated`);
+      if (response.status == 200) { // update success
+        switch (response.data.status_code) {
+          case 201:
+            ctx.status = 200;
+            ctx.response.body = {
+              'status_code': 201,
+            };
+            resLog.info(`User info of ${body.username} updated`);
+            break;
+          case 400:
+            ctx.status = 500;
+            ctx.response.body = {
+              'status_code': 500,
+              'message': 'Unknown serverend error'
+            };
+            resLog.info(`Backend: Necessary field not filled`)
+            break;
+          case 404:
+            ctx.status = 200;
+            ctx.response.body = {
+              'status_code': 404,
+            };
+            resLog.info(`No user ${body.username} existing`);
+            break;
+          case 409:
+            ctx.status = 200;
+            ctx.response.body = {
+              'status_code': 409,
+            };
+            resLog.info(`Conflict field when updating user info of ${body.username}`);
+            break;
+          default:   
+            ctx.status = 500;
+            ctx.response.body = {
+              'message': 'Unknown backend error'
+            };
+            errLog.error('Unknown backend response');
+            break;
+        }
       } else { // backend error
         ctx.status = 500;
         ctx.response.body = {
@@ -108,7 +187,7 @@ let account_info_post = async ctx => {
       ctx.response.body = {
         'message': 'Unknown backend error'
       };
-      errLog.error('Unknown backend response');
+      errLog.error('Unknown backend error');
     });
 };
 
