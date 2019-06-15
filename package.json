@@ -6,7 +6,8 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha",
     "cover": "nyc npm run test && nyc report --reporter=text-lcov | coveralls",
-    "start": "node ./bin/app.js"
+    "start": "node ./bin/app.js",
+    "dev": "node ./development.js"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chokidar": "^3.0.1",
     "coveralls": "^3.0.4",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
@@ -48,7 +50,8 @@
       "*/middleware/*.js",
       "*/config/*.js",
       "coverage/lcov-report/*.js",
-      "*/utils/logger.js"
+      "*/utils/logger.js",
+      "development.js"
     ]
   }
 }

@@ -18,6 +18,21 @@ Server-end project for Coin Arrival
 [API-Design](./docs/API-Design.md)
 -->
 
+### Development
+
+1. Install dependency
+
+    ```bash
+    cd ServerEnd
+    npm install
+    ```
+
+2. Start
+
+    ```bash
+    npm run dev
+    ```
+
 ### Deployment
 
 1. Install dependency
