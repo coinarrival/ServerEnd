@@ -87,7 +87,6 @@ let login = async ctx => {
         'message': 'Unknown backend error'
       };
       errLog.error('Login: Unknown backend error.');
-      break;
     });
 };
 
