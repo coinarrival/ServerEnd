@@ -51,10 +51,10 @@ let registration = async ctx => {
             };
             resLog.info('Registration: necessary info not provided.');
             break;
-          case 406:
+          case 409:
             ctx.status = 200;
             ctx.response.body = {
-              'status_code': 406,
+              'status_code': 409,
             };
             resLog.info('Registration: Conflict username.');
             break;
