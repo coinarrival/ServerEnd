@@ -79,14 +79,25 @@ let account_info_post = async ctx => {
   let request_body = {};
 
   // check username
-  if (body.username === undefined) {
+  if (body.username !== undefined) {
+    if (body.username == current_username /*TODO: Retrieve current username from token.*/) {
+      request_body.username = body.username;
+    } else {
+      ctx.status = 200;
+      ctx.response.body = {
+        'status_code': 401,
+      };
+      resLog.info('Trying to update user info without login.');
+      return;
+    }
+  } else {
     ctx.status = 200;
     ctx.response.body = {
       'status_code': 400,
     };
     resLog.info('Update user info: necessary info not provided.');
+    return;
   }
-  request_body.username = body.username;
   
   // check password
   if (body.password !== undefined) {
@@ -154,17 +165,13 @@ let account_info_post = async ctx => {
             };
             resLog.info(`Backend: Necessary field not filled`)
             break;
-          case 404:
-            ctx.status = 200;
-            ctx.response.body = {
-              'status_code': 404,
-            };
-            resLog.info(`No user ${body.username} existing`);
-            break;
           case 409:
             ctx.status = 200;
             ctx.response.body = {
               'status_code': 409,
+              'data': {
+                'which': response.data.which
+              }
             };
             resLog.info(`Conflict field when updating user info of ${body.username}`);
             break;

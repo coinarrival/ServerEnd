@@ -10,9 +10,12 @@ let registration = async ctx => {
   let body = ctx.request.body;
   let username = body.username;
   let password = body.password;
+  let email    = body.email;
+  let phone    = body.phone;
 
   // check registration info
-  if (username === undefined || password === undefined) {
+  if (username === undefined || password === undefined || 
+    email === undefined || phone === undefined) {
     ctx.status = 200;
     ctx.response.body = {
       'status_code': 400,
@@ -30,9 +33,38 @@ let registration = async ctx => {
     return;
   }
 
+  if (!format.password(password)) {
+    ctx.status = 200;
+    ctx.response.body = {
+      'status_code': 400,
+    };
+    resLog.info('Registration: invalid format of password.');
+    return;
+  }
+
+  if (!format.email(email)) {
+    ctx.status = 200;
+    ctx.response.body = {
+      'status_code': 400,
+    };
+    resLog.info('Registration: invalid format of email.');
+    return;
+  }
+
+  if (!format.phone(phone)) {
+    ctx.status = 200;
+    ctx.response.body = {
+      'status_code': 400,
+    };
+    resLog.info('Registration: invalid format of phone.');
+    return;
+  }
+
   await axios.post(`${config.backend}/registration`, {
     'username': username,
     'password': password,
+    'email'   : email,
+    'phone'   : phone,
   })
     .then(response => {
       if (response.status == 200) { 
@@ -55,8 +87,11 @@ let registration = async ctx => {
             ctx.status = 200;
             ctx.response.body = {
               'status_code': 409,
+              'data': {
+                'which': response.data.which
+              }
             };
-            resLog.info('Registration: Conflict username.');
+            resLog.info('Registration: Conflict field.');
             break;
           default: // unknown status_code
             ctx.status = 500;
