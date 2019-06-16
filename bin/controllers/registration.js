@@ -76,6 +76,7 @@ let registration = async ctx => {
               'status_code': 201,
             };
             resLog.info(`Registration: ${username} succeeded`);
+            break;
           case 400:
             ctx.status = 200;
             ctx.response.body = {
