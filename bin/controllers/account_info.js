@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 
 const format = require('../utils/format');
+const decodeToken = require('../utils/decodeToken');
 const resLog = require('../utils/logger')('resLogger');
 const errLog = require('../utils/logger')('errLogger');
 
@@ -79,17 +80,10 @@ let account_info_post = async ctx => {
   let request_body = {};
 
   // check username
-  if (body.username !== undefined) {
-    if (body.username == current_username /*TODO: Retrieve current username from token.*/) {
-      request_body.username = body.username;
-    } else {
-      ctx.status = 200;
-      ctx.response.body = {
-        'status_code': 401,
-      };
-      resLog.info('Trying to update user info without login.');
-      return;
-    }
+  // token saved in cookies or header
+  let token = decodeToken(ctx);
+  if (token !== null && token.user !== null && token.user !== undefined) {
+    request_body.username = token.user;
   } else {
     ctx.status = 200;
     ctx.response.body = {
@@ -102,7 +96,7 @@ let account_info_post = async ctx => {
   // check password
   if (body.password !== undefined) {
     if (format.password(body.password)) {
-      request_body.password = body.password
+      request_body.password = body.password;
     } else {
       ctx.status = 200;
       ctx.response.body = {
@@ -208,7 +202,7 @@ let upload_avatar = async ctx => {
     ctx.status = 200;
     ctx.response.body = {
       status_code: 400
-    }
+    };
   }
 
   let payload = jwt.decode(ctx.cookies.get(config.jwt_cookie_key));
@@ -225,7 +219,7 @@ let upload_avatar = async ctx => {
     data: {
       filename: `${file_path}.${file_extension}`
     }
-  }
+  };
 };
 
 module.exports = {

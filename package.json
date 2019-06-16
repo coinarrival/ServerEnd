@@ -51,6 +51,8 @@
       "*/config/*.js",
       "coverage/lcov-report/*.js",
       "*/utils/logger.js",
+      "*/utils/decodeToken.js",
+      "*/app.js",
       "development.js"
     ]
   }
