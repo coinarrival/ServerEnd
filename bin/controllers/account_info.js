@@ -196,6 +196,13 @@ let account_info_post = async ctx => {
 // save user avatar file
 let upload_avatar = async ctx => {
   let avatar_file = ctx.request.files.file;
+  if (avatar_file === undefined) {
+    // Field not filled
+    ctx.status = 200;
+    ctx.response.body = {
+      status_code: 400
+    }
+  }
 
   let payload = jwt.decode(ctx.cookies.get(config.jwt_cookie_key));
   let file_path = path.join(__dirname, '../../resources/public/avatar', payload.user);
@@ -206,6 +213,12 @@ let upload_avatar = async ctx => {
   reader.pipe(upStream);
   
   ctx.status = 200;
+  ctx.response.body = {
+    status_code: 200,
+    data: {
+      filename: `${file_path}.${file_extension}`
+    }
+  }
 };
 
 module.exports = {

@@ -7,6 +7,7 @@ const koaJwt = require('koa-jwt');
 const body = require('./middleware/body');
 const router = require('./middleware/controller');
 const static_serve = require('./middleware/static');
+const login_check  = require('./middleware/login_check')
 
 
 // custom utils and configuration
@@ -37,6 +38,9 @@ app.use(router());
 
 // Route static resources
 app.use(static_serve(path.join(__dirname, config.static_path)));
+
+// Custom 401 response
+app.use(login_check());
 
 app.listen(config.port, () => {
   defaultLogger.trace(`Server running at port:${config.port}`);
