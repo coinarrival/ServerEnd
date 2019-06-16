@@ -170,7 +170,7 @@ let account_info_post = async ctx => {
             ctx.response.body = {
               'status_code': 409,
               'data': {
-                'which': response.data.which
+                'which': response.data.data.which
               }
             };
             resLog.info(`Conflict field when updating user info of ${body.username}`);

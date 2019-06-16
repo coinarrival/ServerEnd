@@ -89,7 +89,7 @@ let registration = async ctx => {
             ctx.response.body = {
               'status_code': 409,
               'data': {
-                'which': response.data.which
+                'which': response.data.data.which
               }
             };
             resLog.info('Registration: Conflict field.');
