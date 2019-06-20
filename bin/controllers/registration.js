@@ -94,13 +94,12 @@ let registration = async ctx => {
             };
             resLog.info('Registration: Conflict field.');
             break;
-          default: // unknown status_code
+          default:
             ctx.status = 500;
             ctx.response.body = {
               'message': 'Unknown backend error'
             };
             errLog.error('Registration: Unknown backend response.');
-            break;
         }
       } else { // backend error
         ctx.status = 500;

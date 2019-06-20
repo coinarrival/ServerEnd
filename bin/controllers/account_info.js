@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 
 const format = require('../utils/format');
-const decodeToken = require('../utils/decodeToken');
+const decodeUsername = require('../utils/decodeUsername');
 const resLog = require('../utils/logger')('resLogger');
 const errLog = require('../utils/logger')('errLogger');
 
@@ -19,7 +19,7 @@ let account_info_get = async ctx => {
     ctx.response.body = {
       'status_code': 400,
     };
-    resLog.info('Get user info: necessary info not provided.');
+    resLog.info('GET /account_info: necessary info not provided.');
     return;
   }
 
@@ -29,7 +29,7 @@ let account_info_get = async ctx => {
       if (response.status == 200) { // retrieve success
         switch(response.data.status_code) {
           case 200:
-            resLog.info(`Query success: user info of ${username} sent`);
+            resLog.info(`GET /account_info: Success, user info of ${username} sent`);
             ctx.status = 200;
             ctx.response.body = {
               status_code: 200,
@@ -42,31 +42,36 @@ let account_info_get = async ctx => {
             };
             break;
           case 404:
-            resLog.info(`Query success: user info of ${username} not found`);
+            resLog.info(`GET /account_info: Success, user info of ${username} not found`);
             ctx.status = 200;
             ctx.response.body = {
               'status_code': 404,
             };
             break;
           case 500:
-            errLog.error(`Query failed: unknown backend error when querying user info of ${username}`);
+            errLog.error(`GET /account_info: Failed, unknown backend error when querying user info of ${username}`);
             ctx.status = 500;
             ctx.response.body = {
               'message': 'Unknown backend error'
             };
             break;
           default:
-            errLog.error(`Query failed: unexpected backend response when querying user info of ${username}`);
+            errLog.error(`GET /account_info: Failed, unexpected backend response when querying user info of ${username}`);
             ctx.status = 500;
             ctx.response.body = {
               'message': 'Unknown backend error'
             };
-            break;
         } 
+      } else {
+        errLog.error(`GET /account_info: Failed, unknown backend status code when querying user info of ${username}`);
+        ctx.status = 500;
+        ctx.response.body = {
+          'message': 'Unknown backend error'
+        };
       }
     })
     .catch(error => { // retrieve fail
-      errLog.error(`Query failed: unknown backend error when querying user info of ${username}`);
+      errLog.error(`GET /account_info: Failed, unknown backend error when querying user info of ${username}`);
       ctx.status = 500;
       ctx.response.body = {
         'message': 'Unknown backend error'
@@ -79,18 +84,12 @@ let account_info_post = async ctx => {
   let body = ctx.request.body;
   let request_body = {};
 
-  // check username
-  // token saved in cookies or header
-  let token = decodeToken(ctx);
-  if (token !== null && token.user !== null && token.user !== undefined) {
-    request_body.username = token.user;
-  } else {
-    ctx.status = 200;
-    ctx.response.body = {
-      'status_code': 400,
-    };
-    resLog.info('Update user info: necessary info not provided.');
-    return;
+  // Decode username from token in cookie
+  let username = decodeUsername(ctx, 'POST /account_info');
+  if (username === undefined) { // 500 response has been set in function decodeUsername
+    return; 
+  } else { // Valid username, store it in the body
+    request_body.username = username;
   }
   
   // check password
@@ -102,7 +101,7 @@ let account_info_post = async ctx => {
       ctx.response.body = {
         'status_code': 400,
       };
-      resLog.info('Invalid format of password when updating');
+      resLog.info('POST /account_info: Invalid format of password when updating');
       return;
     }
   }
@@ -116,7 +115,7 @@ let account_info_post = async ctx => {
       ctx.response.body = {
         'status_code': 400,
       };
-      resLog.info('Invalid format of email when updating');
+      resLog.info('POST /account_info: Invalid format of email when updating');
       return;
     }
   }
@@ -130,7 +129,7 @@ let account_info_post = async ctx => {
       ctx.response.body = {
         'status_code': 400,
       };
-      resLog.info('Invalid format of phone when updating');
+      resLog.info('POST /account_info: Invalid format of phone when updating');
       return;      
     }
   }
@@ -149,7 +148,7 @@ let account_info_post = async ctx => {
             ctx.response.body = {
               'status_code': 201,
             };
-            resLog.info(`User info of ${body.username} updated`);
+            resLog.info(`POST /account_info: User info of ${body.username} updated`);
             break;
           case 400:
             ctx.status = 500;
@@ -157,7 +156,7 @@ let account_info_post = async ctx => {
               'status_code': 500,
               'message': 'Unknown serverend error'
             };
-            resLog.info(`Backend: Necessary field not filled`)
+            resLog.info(`POST /account_info: Backend: Necessary field not filled`)
             break;
           case 409:
             ctx.status = 200;
@@ -167,22 +166,21 @@ let account_info_post = async ctx => {
                 'which': response.data.data.which
               }
             };
-            resLog.info(`Conflict field when updating user info of ${body.username}`);
+            resLog.info(`POST /account_info: Conflict field when updating user info of ${body.username}`);
             break;
           default:   
             ctx.status = 500;
             ctx.response.body = {
               'message': 'Unknown backend error'
             };
-            errLog.error('Unknown backend response');
-            break;
+            errLog.error('POST /account_info: Unknown backend response status_code');
         }
       } else { // backend error
         ctx.status = 500;
         ctx.response.body = {
           'message': 'Unknown backend error'
         };
-        errLog.error('Unknown backend response');
+        errLog.error('POST /account_info: Unknown backend response status');
       }
     })
     .catch(error => { // update fail
@@ -190,7 +188,7 @@ let account_info_post = async ctx => {
       ctx.response.body = {
         'message': 'Unknown backend error'
       };
-      errLog.error('Unknown backend error');
+      errLog.error('POST /account_info: Unknown backend error');
     });
 };
 
