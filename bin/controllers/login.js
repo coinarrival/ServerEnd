@@ -70,8 +70,7 @@ let login = async ctx => {
             ctx.response.body = {
               'message': 'Unknown backend error'
             };
-            errLog.error('Login: Unknown backend response.');
-            break;         
+            errLog.error('Login: Unknown backend response.');    
         }
       } else { // backend error
         ctx.status = 500;
