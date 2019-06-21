@@ -16,7 +16,7 @@ let task_get = async ctx => {
     return;
   }
 
-  axios.get(`${config.backend}/task`, {
+  await axios.get(`${config.backend}/task`, {
     'params': {
       'taskID': taskID
     }
@@ -103,7 +103,7 @@ let task_post = async ctx => {
   }
   request_body.issuer = username;
 
-  axios.post(`${config.backend}/task`, request_body)
+  await axios.post(`${config.backend}/task`, request_body)
   .then(response => {
     if (response.status == 200) {
       switch(response.data.status_code) {
@@ -172,7 +172,7 @@ let task_delete = async ctx => {
     return;
   }
 
-  axios.delete(`${config.backend}/task`, {
+  await axios.delete(`${config.backend}/task`, {
     'params': {
       'issuer': username,
       'taskID': taskID,
