@@ -129,7 +129,7 @@ let task_post = async ctx => {
           ctx.response.body = {
             'message': 'Unknown serverend error.'
           };
-          resLog.info(`GET /task: Failed, serverend error for unfilled field.`);
+          resLog.info(`POST /task: Failed, serverend error for unfilled field.`);
           break;
         default:
           ctx.status = 500;
@@ -229,7 +229,7 @@ let task_delete = async ctx => {
       ctx.response.body = {
         'message': 'Unknown backend error'
       };
-      errLog.error('GET /task: Unknown backend error');
+      errLog.error('DELETE /task: Unknown backend error');
     });
 };
 
