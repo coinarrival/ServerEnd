@@ -34,7 +34,7 @@ let accepted_tasks_get = async ctx => {
           case 200:
             ctx.status = 200;
             ctx.response.body = response.data;
-            resLog.info(`GET /accepted_tasks: Success. Task info queryed.`);
+            resLog.info(`GET /accepted_tasks: Success.`);
             break;
           case 416:
             ctx.status = 200;

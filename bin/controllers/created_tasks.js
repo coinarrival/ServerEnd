@@ -5,7 +5,7 @@ const decodeUsername = require('../utils/decodeUsername');
 const resLog = require('../utils/logger')('resLogger');
 const errLog = require('../utils/logger')('errLogger');
 
-let created_tasks_get = ctx => {
+let created_tasks_get = async ctx => {
   // Decode username from token in cookies
   let username = decodeUsername(ctx, 'GET /created_tasks')
   if (username === undefined) { // 500 response has been set in function decodeUsername
