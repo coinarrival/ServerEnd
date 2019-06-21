@@ -2,6 +2,7 @@
 const koa = require('koa');
 const path = require('path');
 const koaJwt = require('koa-jwt');
+const cors = require('koa2-cors');
 
 // custom middleware
 const body = require('./middleware/body');
@@ -15,6 +16,19 @@ const config = require('./config/config');
 const defaultLogger = require('./utils/logger')('default');
 
 const app = new koa();
+
+// fix cors request
+app.use(cors({
+    origin: function (ctx) {
+      return '*';
+    },
+    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+    maxAge: 5,
+    credentials: true,
+    allowMethods: ['GET', 'POST', 'DELETE'],
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+}));
+
 
 app.use(
   koaJwt({ // jwt configuration
