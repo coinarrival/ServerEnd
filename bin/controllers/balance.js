@@ -1,10 +1,6 @@
-const path = require('path');
 const axios  = require('axios');
-const jwt = require('jsonwebtoken');
-
 const config = require('../config/config');
 
-const format = require('../utils/format');
 const decodeUsername = require('../utils/decodeUsername');
 const resLog = require('../utils/logger')('resLogger');
 const errLog = require('../utils/logger')('errLogger');
@@ -16,7 +12,11 @@ let balance_get = async ctx => {
     return;
   }
 
-  await axios.get(`/balance?username=${username}`)
+  await axios.get(`${config.backend}/balance`, {
+    'params': {
+      'username': username
+    }
+  })
     .then(response => {
       if(response.status == 200) {
         switch(response.data.status_code) {
@@ -58,8 +58,8 @@ let balance_get = async ctx => {
         'message': 'Unknown backend error'
       };
       errLog.error('GET /balance: Unknown backend error');
-    })
-}
+    });
+};
 
 module.exports = {
   'GET /balance': balance_get,

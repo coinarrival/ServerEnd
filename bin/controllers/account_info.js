@@ -24,7 +24,11 @@ let account_info_get = async ctx => {
   }
 
   // retrieve account info from back-end
-  await axios.get(`${config.backend}/account_info?username=${username}`)
+  await axios.get(`${config.backend}/account_info`, {
+    'params': {
+      'username': username
+    }
+  })
     .then(response => {
       if (response.status == 200) { // retrieve success
         switch(response.data.status_code) {
