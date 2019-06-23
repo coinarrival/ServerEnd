@@ -16,7 +16,7 @@ let tasks_get = async ctx => {
   }
 
   let fields = ['title', 'type', 'issuer', 'content', 'isComplete'];
-  for (field in fields) {
+  for (field of fields) {
     if (ctx.query[field] !== undefined) {
       params[field] = ctx.query[field];
     }

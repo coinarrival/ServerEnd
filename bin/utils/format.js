@@ -47,9 +47,20 @@ let phone = function is_valid_phone(phone) {
   return true;
 };
 
+/**
+ * Validate the role if it's in correct format
+ * @param {string} role the role to be validated
+ * @returns {boolean} true for matches format, otherwise false
+ */
+let role = function is_valid_role(role) {
+  // TODO: verify with regular expression
+  return true;
+}
+
 module.exports = {
   username: username,
   password: password,
   email: email,
-  phone: phone
+  phone: phone,
+  role: role,
 };

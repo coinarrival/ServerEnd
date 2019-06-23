@@ -37,12 +37,7 @@ let account_info_get = async ctx => {
             ctx.status = 200;
             ctx.response.body = {
               status_code: 200,
-              data: {
-                username: response.data.data.username,
-                email: response.data.data.email,
-                phone: response.data.data.phone,
-                avatar: response.data.data.avatar,
-              }
+              data: response.data.data
             };
             break;
           case 404:
@@ -138,9 +133,13 @@ let account_info_post = async ctx => {
     }
   }
 
-  // check avatar
-  if (body.avatar !== undefined) {
-    request_body.avatar = body.avatar;
+  let fields = ['school', 'major', 'age', 'studentID', 'grade', 'teacherID', 'avatar'];
+
+  // check fields
+  for (let field of fields) {
+    if (body[field] !== undefined) {
+      request_body[field] = body[field];
+    }
   }
 
   await axios.post(`${config.backend}/account_info`, request_body)

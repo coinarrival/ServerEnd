@@ -87,7 +87,7 @@ let task_post = async ctx => {
   let body = ctx.request.body;
   let request_body = {};
   let fields = ['title', 'content', 'type', 'reward', 'repeatTime', 'deadLine'];
-  for (field in fields) {
+  for (field of fields) {
     if (body[field] !== undefined) {
       request_body[field] = body[field];
     }

@@ -10,12 +10,13 @@ let registration = async ctx => {
   let body = ctx.request.body;
   let username = body.username;
   let password = body.password;
-  let email    = body.email;
-  let phone    = body.phone;
+  let email = body.email;
+  let phone = body.phone;
+  let role = body.role;
 
   // check registration info
   if (username === undefined || password === undefined || 
-    email === undefined || phone === undefined) {
+    email === undefined || phone === undefined || role === undefined) {
     ctx.status = 200;
     ctx.response.body = {
       'status_code': 400,
@@ -60,11 +61,21 @@ let registration = async ctx => {
     return;
   }
 
+  if (!format.role(role)) {
+    ctx.status = 200;
+    ctx.response.body = {
+      'status_code': 400,
+    };
+    resLog.info('Registration: invalid format of role.');
+    return;
+  }
+
   await axios.post(`${config.backend}/registration`, {
     'username': username,
     'password': password,
     'email'   : email,
     'phone'   : phone,
+    'role'    : role,
   })
     .then(response => {
       if (response.status == 200) { 

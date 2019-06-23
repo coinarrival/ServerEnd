@@ -91,7 +91,7 @@ let created_tasks_post = async ctx => {
   }
 
   let fields = ['title', 'reward', 'deadline'];
-  for (field in fields) {
+  for (field of fields) {
     if (ctx.query[field] !== undefined) {
       request_body[field] = ctx.query[field];
     }
