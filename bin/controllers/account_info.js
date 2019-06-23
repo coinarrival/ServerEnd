@@ -1,6 +1,6 @@
 const path = require('path');
 const axios  = require('axios');
-const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 const config = require('../config/config');
 
@@ -206,8 +206,9 @@ let upload_avatar = async ctx => {
     };
   }
 
-  let payload = jwt.decode(ctx.cookies.get(config.jwt_cookie_key));
-  let file_path = path.join(__dirname, '../../resources/public/avatar', payload.user);
+
+  let username = decodeUsername(ctx, 'POST /avatar');
+  let file_path = path.join(__dirname, '../../resources/public/avatar', username);
   let file_extension = avatar_file.name.split('.').slice(-1)[0];
   
   let reader = fs.createReadStream(avatar_file.path);
@@ -218,7 +219,7 @@ let upload_avatar = async ctx => {
   ctx.response.body = {
     status_code: 200,
     data: {
-      filename: `${file_path}.${file_extension}`
+      filename: `${username}`
     }
   };
 };
