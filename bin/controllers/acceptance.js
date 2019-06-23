@@ -188,7 +188,7 @@ let acceptance_delete = async ctx => {
     return;
   }
 
-  await axios.delete(`${config.backend}/acceptance`, {
+  await axios.post(`${config.backend}/acceptance_removed`, {
     'userID': userID,
     'taskID': taskID,
     'issuer': username,

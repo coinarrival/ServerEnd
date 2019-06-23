@@ -172,11 +172,9 @@ let task_delete = async ctx => {
     return;
   }
 
-  await axios.delete(`${config.backend}/task`, {
-    'params': {
-      'issuer': username,
-      'taskID': taskID,
-    }
+  await axios.post(`${config.backend}/task_removed`, {
+    'issuer': username,
+    'taskID': taskID,
   })
     .then(response => {
       if (response.status == 200) {
