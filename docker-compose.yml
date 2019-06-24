@@ -1,0 +1,28 @@
+version: '3'
+services:
+  coin_arrival_db:
+    image: mysql:5.7
+    restart: always
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;' --innodb-flush-log-at-trx-commit=0
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_DATABASE=coin_arrival
+      - MYSQL_ROOT_PASSWORD=root
+
+  backend:
+    image: backend_backend:latest
+    restart: always
+    expose:
+      - "8000"
+  
+  serverend:
+    build: .
+    command: npm start
+    volumes:
+      - .:/home/coinArrival/ServerEnd
+    ports:
+      - "3000:3000"
+    links:
+      - coin_arrival_db
+      - backend
