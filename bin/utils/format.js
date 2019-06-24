@@ -13,7 +13,7 @@
  * @returns {boolean} true for matches format, otherwise false
  */
 let username = function is_valid_username(username) {
-  var reg = /^[a-zA-Z\u4E00-\u9FA5][a-zA-Z0-9_\u4E00-\u9FA5]{1,15}$/;
+  var reg = /^[a-zA-Z\u4E00-\u9FA5][a-zA-Z0-9_\u4E00-\u9FA5]{0,14}$/;
   return reg.test(username);
 };
 
