@@ -93,7 +93,7 @@ let accepted_tasks_post = async ctx => {
   }
   request_body.taskID = taskID;
 
-  if (body.answer !== undefined && body.answer !== null) {
+  if (body.answer !== undefined && body.answer !== null && body.answer !== '') {
     request_body.answer = body.answer;
   } 
 

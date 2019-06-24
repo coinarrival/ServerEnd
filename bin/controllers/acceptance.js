@@ -7,7 +7,7 @@ const errLog = require('../utils/logger')('errLogger');
 
 let acceptance_get = async ctx => {
   // Decode username from token in cookies
-  let username = decodeUsername(ctx, 'GET /acceptance')
+  let username = decodeUsername(ctx, 'GET /acceptance');
   if (username === undefined) { // 500 response has been set in function decodeUsername
     return;
   }
@@ -183,14 +183,14 @@ let acceptance_post = async ctx => {
 
 let acceptance_delete = async ctx => {
   // Decode username from token in cookies
-  let username = decodeUsername(ctx, 'DELETE /acceptance')
+  let username = decodeUsername(ctx, 'DELETE /acceptance');
   if (username === undefined) { // 500 response has been set in function decodeUsername
     return;
   }
 
   let taskID = ctx.request.query.taskID;
   if (taskID === undefined || taskID === null) {
-    ctx.status = 200
+    ctx.status = 200;
     ctx.response.body = {
       'status_code': 400
     };
