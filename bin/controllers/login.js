@@ -14,7 +14,7 @@ let login = async ctx => {
   let password = body.password;
 
   // check login data
-  if (username === undefined || password === undefined) {
+  if (username === undefined || password === undefined || username === null || password === null) {
     ctx.status = 200;
     ctx.response.body = {
       'status_code': 400,

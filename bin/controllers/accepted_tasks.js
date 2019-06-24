@@ -13,7 +13,7 @@ let accepted_tasks_get = async ctx => {
   }
   
   let page = ctx.query.page;
-  if (page === undefined) {
+  if (page === undefined || page === null) {
     ctx.status = 200
     ctx.response.body = {
       'status_code': 400
@@ -73,14 +73,17 @@ let accepted_tasks_get = async ctx => {
 }
 
 let accepted_tasks_post = async ctx => {
+  let body = ctx.request.body;
+  let request_body = {};
   // Decode username from token in cookies
   let username = decodeUsername(ctx, 'POST /accepted_tasks')
   if (username === undefined) { // 500 response has been set in function decodeUsername
     return;
   }
+  request_body.username = username;
 
-  let taskID = ctx.query.taskID;
-  if (taskID === undefined) {
+  let taskID = body.taskID;
+  if (taskID === undefined || taskID === null) {
     ctx.status = 200
     ctx.response.body = {
       'status_code': 400
@@ -88,11 +91,13 @@ let accepted_tasks_post = async ctx => {
     resLog.info(`POST /accepted_tasks: Failed for taskID field not filled`);
     return;
   }
+  request_body.taskID = taskID;
 
-  await axios.post(`${config.backend}/accepted_tasks`, {
-    'taskID': taskID,
-    'username': username,
-  })
+  if (body.answer !== undefined && body.answer !== null) {
+    request_body.answer = body.answer;
+  } 
+
+  await axios.post(`${config.backend}/accepted_tasks`, request_body)
     .then(response => {
       if (response.status == 200) {
         switch(response.data.status_code) {

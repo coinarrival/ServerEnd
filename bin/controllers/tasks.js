@@ -6,7 +6,7 @@ const errLog = require('../utils/logger')('errLogger');
 
 let tasks_get = async ctx => {
   let params = {};
-  if (ctx.query.page === undefined) {
+  if (ctx.query.page === undefined || ctx.query.page === null) {
     ctx.status = 200
     ctx.response.body = {
       'status_code': 400
@@ -15,14 +15,14 @@ let tasks_get = async ctx => {
     return;
   }
 
-  let fields = ['title', 'type', 'issuer', 'content', 'isComplete'];
+  let fields = ['page', 'title', 'type', 'issuer', 'content', 'isComplete'];
   for (field of fields) {
-    if (ctx.query[field] !== undefined) {
+    if (ctx.query[field] !== undefined && ctx.query[field] !== null) {
       params[field] = ctx.query[field];
     }
   }
 
-  axios.get(`${config.backend}/tasks`, {params})
+  await axios.get(`${config.backend}/tasks`, {params})
     .then(response => {
       if (response.status == 200) {
         switch(response.data.status_code) {

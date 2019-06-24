@@ -13,8 +13,8 @@ let acceptance_get = async ctx => {
   }
   
   let page = ctx.query.page;
-  if (page === undefined) {
-    ctx.status = 200
+  if (page === undefined || page === null) {
+    ctx.status = 200;
     ctx.response.body = {
       'status_code': 400
     };
@@ -23,8 +23,8 @@ let acceptance_get = async ctx => {
   }
 
   let taskID = ctx.query.taskID;
-  if (taskID === undefined) {
-    ctx.status = 200
+  if (taskID === undefined || taskID === null) {
+    ctx.status = 200;
     ctx.response.body = {
       'status_code': 400
     };
@@ -64,6 +64,11 @@ let acceptance_get = async ctx => {
             ctx.response.body = response.data;
             resLog.info(`GET /acceptance: Failed, page parameter out of range.`);
             break;
+          case 401:
+            ctx.status = 200;
+            ctx.response.body = response.data;
+            resLog.info(`DELETE /acceptance: Failed, not authorized.`);
+            break;
           default:
             ctx.status = 500;
             ctx.response.body = {
@@ -96,7 +101,7 @@ let acceptance_post = async ctx => {
   }
 
   let userID = ctx.request.body.userID;
-  if (userID === undefined) {
+  if (userID === undefined || userID === null) {
     ctx.status = 200
     ctx.response.body = {
       'status_code': 400
@@ -106,7 +111,7 @@ let acceptance_post = async ctx => {
   }
 
   let taskID = ctx.request.body.taskID;
-  if (taskID === undefined) {
+  if (taskID === undefined || taskID === null) {
     ctx.status = 200
     ctx.response.body = {
       'status_code': 400
@@ -147,6 +152,11 @@ let acceptance_post = async ctx => {
             ctx.response.body = response.data;
             resLog.info(`POST /acceptance: Failed, unable to finish completed task.`);
             break;
+          case 401:
+            ctx.status = 200;
+            ctx.response.body = response.data;
+            resLog.info(`DELETE /acceptance: Failed, not authorized.`);
+            break;
           default:
             ctx.status = 500;
             ctx.response.body = {
@@ -178,8 +188,8 @@ let acceptance_delete = async ctx => {
     return;
   }
 
-  let taskID = ctx.request.body.taskID;
-  if (taskID === undefined) {
+  let taskID = ctx.request.query.taskID;
+  if (taskID === undefined || taskID === null) {
     ctx.status = 200
     ctx.response.body = {
       'status_code': 400
@@ -189,9 +199,8 @@ let acceptance_delete = async ctx => {
   }
 
   await axios.post(`${config.backend}/acceptance_removed`, {
-    'userID': userID,
     'taskID': taskID,
-    'issuer': username,
+    'username': username,
   })
     .then(response => {
       if (response.status == 200) {
@@ -219,6 +228,11 @@ let acceptance_delete = async ctx => {
             ctx.status = 200;
             ctx.response.body = response.data;
             resLog.info(`DELETE /acceptance: Failed, unable to finish finished task.`);
+            break;
+          case 401:
+            ctx.status = 200;
+            ctx.response.body = response.data;
+            resLog.info(`DELETE /acceptance: Failed, not authorized.`);
             break;
           default:
             ctx.status = 500;

@@ -7,7 +7,7 @@ const errLog = require('../utils/logger')('errLogger');
 
 let task_get = async ctx => {
   let taskID = ctx.query.taskID;
-  if (taskID === undefined) {
+  if (taskID === undefined || taskID === null) {
     ctx.status = 200
     ctx.response.body = {
       'status_code': 400
@@ -88,7 +88,7 @@ let task_post = async ctx => {
   let request_body = {};
   let fields = ['title', 'content', 'type', 'reward', 'repeatTime', 'deadLine'];
   for (field of fields) {
-    if (body[field] !== undefined) {
+    if (body[field] !== undefined && body[field] !== null) {
       request_body[field] = body[field];
     }
   }
@@ -163,7 +163,7 @@ let task_delete = async ctx => {
   }
 
   let taskID = ctx.query.taskID;
-  if (taskID === undefined) {
+  if (taskID === undefined || taskID === null) {
     ctx.status = 200
     ctx.response.body = {
       'status_code': 400

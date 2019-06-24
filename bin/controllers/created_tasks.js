@@ -13,7 +13,7 @@ let created_tasks_get = async ctx => {
   }
 
   let page = ctx.query.page;
-  if (page === undefined) {
+  if (page === undefined || page === null) {
     ctx.status = 200
     ctx.response.body = {
       'status_code': 400
@@ -81,7 +81,7 @@ let created_tasks_post = async ctx => {
   let body = ctx.request.body;
   
   let request_body = {};
-  if (body.taskID === undefined) {
+  if (body.taskID === undefined || body.taskID === null) {
     ctx.status = 200;
     ctx.response.body = {
       'status_code': 400,
@@ -92,8 +92,8 @@ let created_tasks_post = async ctx => {
 
   let fields = ['title', 'reward', 'deadline'];
   for (field of fields) {
-    if (ctx.query[field] !== undefined) {
-      request_body[field] = ctx.query[field];
+    if (body[field] !== undefined && body[field] !== null) {
+      request_body[field] = body[field];
     }
   }
 
@@ -108,7 +108,7 @@ let created_tasks_post = async ctx => {
   request_body.issuer = username;
   request_body.taskID = body.taskID;
 
-  await this.axios.post(`${config.backend}/created_tasks`, request_body)
+  await axios.post(`${config.backend}/created_tasks`, request_body)
     .then(response => {
       if (response.status == 200) {
         switch(response.data.status_code) {
@@ -164,4 +164,5 @@ let created_tasks_post = async ctx => {
 
 module.exports = {
   'GET /created_tasks': created_tasks_get,
+  'POST /created_tasks': created_tasks_post,
 };

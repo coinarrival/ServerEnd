@@ -8,75 +8,32 @@ const errLog = require('../utils/logger')('errLogger');
 
 let registration = async ctx => {
   let body = ctx.request.body;
-  let username = body.username;
-  let password = body.password;
-  let email = body.email;
-  let phone = body.phone;
-  let role = body.role;
+  let request_body = {};
 
-  // check registration info
-  if (username === undefined || password === undefined || 
-    email === undefined || phone === undefined || role === undefined) {
-    ctx.status = 200;
-    ctx.response.body = {
-      'status_code': 400,
-    };
-    resLog.info('Registration: necessary info not provided.');
-    return;
+  fields = ['username', 'password', 'email', 'phone', 'role'];
+  for (field of fields) {
+    request_body[field] = body[field];
+
+    if (request_body[field] === undefined || request_body[field] === null) {
+      ctx.status = 200;
+      ctx.response.body = {
+        'status_code': 400,
+      };
+      resLog.info('Registration: necessary info not provided.');
+      return;
+    }
+
+    if (!format[field](request_body[field])) {
+      ctx.status = 200;
+      ctx.response.body = {
+        'status_code': 400,
+      };
+      resLog.info(`Registration: invalid format of ${field}.`);
+      return;
+    }
   }
 
-  if (!format.username(username)) {
-    ctx.status = 200;
-    ctx.response.body = {
-      'status_code': 400,
-    };
-    resLog.info('Registration: invalid format of username.');
-    return;
-  }
-
-  if (!format.password(password)) {
-    ctx.status = 200;
-    ctx.response.body = {
-      'status_code': 400,
-    };
-    resLog.info('Registration: invalid format of password.');
-    return;
-  }
-
-  if (!format.email(email)) {
-    ctx.status = 200;
-    ctx.response.body = {
-      'status_code': 400,
-    };
-    resLog.info('Registration: invalid format of email.');
-    return;
-  }
-
-  if (!format.phone(phone)) {
-    ctx.status = 200;
-    ctx.response.body = {
-      'status_code': 400,
-    };
-    resLog.info('Registration: invalid format of phone.');
-    return;
-  }
-
-  if (!format.role(role)) {
-    ctx.status = 200;
-    ctx.response.body = {
-      'status_code': 400,
-    };
-    resLog.info('Registration: invalid format of role.');
-    return;
-  }
-
-  await axios.post(`${config.backend}/registration`, {
-    'username': username,
-    'password': password,
-    'email'   : email,
-    'phone'   : phone,
-    'role'    : role,
-  })
+  await axios.post(`${config.backend}/registration`, request_body)
     .then(response => {
       if (response.status == 200) { 
         switch(response.data.status_code) {
@@ -86,7 +43,7 @@ let registration = async ctx => {
             ctx.response.body = {
               'status_code': 201,
             };
-            resLog.info(`Registration: ${username} succeeded`);
+            resLog.info(`Registration: ${request_body.username} succeeded`);
             break;
           case 400:
             ctx.status = 200;

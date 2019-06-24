@@ -133,11 +133,11 @@ let account_info_post = async ctx => {
     }
   }
 
-  let fields = ['school', 'major', 'age', 'studentID', 'grade', 'teacherID', 'avatar'];
+  let fields = ['gender', 'school', 'major', 'age', 'studentID', 'grade', 'teacherID', 'avatar'];
 
   // check fields
   for (let field of fields) {
-    if (body[field] !== undefined) {
+    if (body[field] !== undefined && body[field] !== null) {
       request_body[field] = body[field];
     }
   }
