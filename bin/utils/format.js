@@ -13,8 +13,8 @@
  * @returns {boolean} true for matches format, otherwise false
  */
 let username = function is_valid_username(username) {
-  // TODO: verify with regular expression
-  return true;
+  var reg = /^[a-zA-Z\u4E00-\u9FA5][a-zA-Z0-9_\u4E00-\u9FA5]{1,15}$/;
+  return reg.test(username);
 };
 
 /**
@@ -23,8 +23,7 @@ let username = function is_valid_username(username) {
  * @returns {boolean} true for matches format, otherwise false
  */
 let password = function is_valid_password(password) {
-  // TODO: verify with regular expression
-  return true;
+  return ((password.length >= 8) && (password.length <= 20));
 };
 
 /**
@@ -33,8 +32,8 @@ let password = function is_valid_password(password) {
  * @returns {boolean} true for matches format, otherwise false
  */
 let email = function is_valid_email(email) {
-  // TODO: verify with regular expression
-  return true;
+  var reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+  return reg.test(email);
 };
 
 /**
@@ -43,8 +42,8 @@ let email = function is_valid_email(email) {
  * @returns {boolean} true for matches format, otherwise false
  */
 let phone = function is_valid_phone(phone) {
-  // TODO: verify with regular expression
-  return true;
+  var reg = /^1[34578]\d{9}$/;
+  return reg.test(phone);
 };
 
 /**
@@ -53,8 +52,7 @@ let phone = function is_valid_phone(phone) {
  * @returns {boolean} true for matches format, otherwise false
  */
 let role = function is_valid_role(role) {
-  // TODO: verify with regular expression
-  return true;
+  return ((role === 'student') || (role === 'teacher'));
 }
 
 module.exports = {
