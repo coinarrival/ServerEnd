@@ -19,6 +19,10 @@ function addMapping(router, mapping) {
       let path = url.substring(5);
       router.post(path, mapping[url]);
       defaultLogger.info(`  [Register URL] POST ${path}`);
+    } else if (url.startsWith('DELETE ')) {
+      let path = url.substring(7);
+      router.delete(path, mapping[url]);
+      defaultLogger.info(`  [Register URL] DELETE ${path}`);
     } else {
       defaultLogger.info(`  [Register URL] INVALID ${url}`);
     }

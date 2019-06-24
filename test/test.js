@@ -8,12 +8,12 @@ describe('Test for format function', () => {
     chai.expect(format.username('test')).to.equal(true);
   });
   it('password', () => {
-    chai.expect(format.username('test')).to.equal(true);
+    chai.expect(format.password('123456789')).to.equal(true);
   });
   it('email', () => {
-    chai.expect(format.email('test')).to.equal(true);
+    chai.expect(format.email('test@test.com')).to.equal(true);
   });
   it('phone', () => {
-    chai.expect(format.phone('test')).to.equal(true);
+    chai.expect(format.phone('13712345678')).to.equal(true);
   });
 });
