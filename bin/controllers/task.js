@@ -29,6 +29,7 @@ let task_get = async ctx => {
             ctx.response.body = {
               'status_code': 200,
               'data': {
+                'title': response.data.data.title,
                 'content': response.data.data.content,
                 'type': response.data.data.type,
                 'issuer': response.data.data.issuer,
@@ -95,7 +96,7 @@ let task_post = async ctx => {
       ctx.response.body = {
         'status_code': 400
       };
-      resLog.info(`POST /task: Failed for no field is filled`);
+      resLog.info(`POST /task: Failed for necessary field is filled`);
       return;
     }
   }

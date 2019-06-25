@@ -38,6 +38,7 @@ app.use(
   .unless({ // below url needn't provide jwt
     path: [
       /^\/public\/*/, // static resources
+      /^\/dist\/*/, // static resources
       /^\/registration/,
       /^\/login/
     ]
