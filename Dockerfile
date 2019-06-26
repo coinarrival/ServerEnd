@@ -9,6 +9,7 @@ WORKDIR /home/coinArrival/ServerEnd
 COPY . /home/coinArrival/ServerEnd
 
 # Install any needed packages
+RUN npm config set registry http://registry.npm.taobao.org/
 RUN npm install
 
 # Make port 3000 available to the world outside this container
