@@ -65,3 +65,6 @@ typings/
 
 # @SiskonEmilia
 bin/controllers/siskonemilia_template.js
+
+# package-lock
+package-lock.json
