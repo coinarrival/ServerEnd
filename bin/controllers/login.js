@@ -48,7 +48,7 @@ let login = async ctx => {
             ctx.response.body = {
               'status_code': 200,
             };
-            ctx.cookies.set(config.jwtCookieKey, token);
+            ctx.cookies.set(config.jwt_cookie_key, token);
             resLog.info(`Login: ${username} online`);
             break;
           case 400:

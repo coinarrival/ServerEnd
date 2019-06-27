@@ -6,9 +6,9 @@ const resLog = require('../utils/logger')('resLogger');
 const errLog = require('../utils/logger')('errLogger');
 
 let task_get = async ctx => {
-  let taskID = ctx.query.taskID;
+  let taskID = ctx.query.taskID ? ctx.query.taskID : 0;
   if (taskID === undefined || taskID === null) {
-    ctx.status = 200
+    ctx.status = 200;
     ctx.response.body = {
       'status_code': 400
     };
@@ -29,6 +29,7 @@ let task_get = async ctx => {
             ctx.response.body = {
               'status_code': 200,
               'data': {
+                'title': response.data.data.title,
                 'content': response.data.data.content,
                 'type': response.data.data.type,
                 'issuer': response.data.data.issuer,
@@ -80,26 +81,24 @@ let task_get = async ctx => {
 
 let task_post = async ctx => {
   // Decode username from token in cookies
-  let username = decodeUsername(ctx, 'POST /task')
+  let username = decodeUsername(ctx, 'POST /task');
   if (username === undefined) { // 500 response has been set in function decodeUsername
     return;
   }
   let body = ctx.request.body;
   let request_body = {};
-  let fields = ['title', 'content', 'type', 'reward', 'repeatTime', 'deadLine'];
+  let fields = ['title', 'content', 'type', 'reward', 'repeatTime', 'deadline'];
   for (field of fields) {
     if (body[field] !== undefined && body[field] !== null) {
       request_body[field] = body[field];
+    } else {
+      ctx.status = 200;
+      ctx.response.body = {
+        'status_code': 400
+      };
+      resLog.info(`POST /task: Failed for necessary field is filled`);
+      return;
     }
-  }
-  
-  if (request_body === {}) {
-    ctx.status = 200
-    ctx.response.body = {
-      'status_code': 400
-    };
-    resLog.info(`POST /task: Failed for no field is filled`);
-    return;
   }
   request_body.issuer = username;
 

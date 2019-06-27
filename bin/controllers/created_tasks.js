@@ -74,7 +74,7 @@ let created_tasks_get = async ctx => {
 
 let created_tasks_post = async ctx => {
   // Decode username from token in cookies
-  let username = decodeUsername(ctx, 'POST /created_tasks')
+  let username = decodeUsername(ctx, 'POST /created_tasks');
   if (username === undefined) { // 500 response has been set in function decodeUsername
     return;
   }

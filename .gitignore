@@ -68,3 +68,8 @@ bin/controllers/siskonemilia_template.js
 
 # package-lock
 package-lock.json
+# @dev
+resources/dist/
+resources/public/dist/
+resources/public/static/
+resources/public/index.html
